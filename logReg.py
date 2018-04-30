@@ -22,22 +22,34 @@ D = 2  # dimensionality
 K = 3  # number of classes
 X = np.zeros((N * K, f))
 y = np.zeros((N * K, 3), dtype='uint8')
+# used for feature scaling
+avgX = np.zeros((1, f))
+maxX = np.zeros((1, f))
+
 for j in range(K):
     ix = range(N * j, N * (j + 1))
     r = np.linspace(0.0, 1, N)  # radius
     t = np.linspace(j * 4, (j + 1) * 4, N) + np.random.randn(N) * 0.2  # theta
     xx = r * np.sin(t)
     yy = r * np.cos(t)
-    X[ix] = np.c_[xx, yy,
-                  xx * xx, yy * yy,
-                  xx * xx * xx, yy * yy * yy,
-                  np.power(xx, 4), np.power(yy, 4),
-                  # np.power(xx, 5), np.power(yy, 5),
+
+    X[ix] = np.c_[xx,
+                  yy,
+                  np.power(xx, 2),
+                  np.power(yy, 2),
+                  np.power(xx, 3),
+                  np.power(yy, 3),
+                  np.power(xx, 4),
+                  np.power(yy, 4),
                   xx * yy,
-                  xx * xx * yy, xx * yy * yy,
-                  np.power(xx, 3) * yy, np.power(yy, 3) * xx,
+                  np.power(xx, 2) * yy,
+                  xx * np.power(yy, 2),
+                  np.power(xx, 3) * yy,
+                  np.power(yy, 3) * xx,
                   np.power(xx, 2) * np.power(xx, 2)]
+
     y[ix] = np.c_[j == 0, j == 1, j == 2]
+
 
 h = 100  # size of hidden layer
 l = 3  # num of layer
