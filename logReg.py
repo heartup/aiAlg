@@ -50,6 +50,10 @@ for j in range(K):
 
     y[ix] = np.c_[j == 0, j == 1, j == 2]
 
+avgX = X.mean(0)
+maxX = X.max(0)
+
+X = (X - avgX) / maxX
 
 h = 100  # size of hidden layer
 l = 3  # num of layer
@@ -65,14 +69,16 @@ step_size = 0.0001
 reg_step = 0.00000001
 
 num_examples = X.shape[0]
-for i in range(20050):
+for i in range(10050):
     a = [X]
     for j in range(l - 1):
         a.append(nonlin(np.dot(a[j], W[j])))
 
     d_y = a[l - 1] - y
+
+    err = np.mean(np.abs(d_y))
     if (i % 100) == 0:
-        print("Error:" + str(np.mean(np.abs(d_y))))
+        print("Error:" + str(err))
 
     d_z = [nonlin(d_y, deriv=True)]
     for j in range(l - 2):
@@ -99,14 +105,25 @@ xx, yy = np.meshgrid(np.arange(x_min, x_max, h),
 xxr = xx.ravel()
 yyr = yy.ravel()
 
-a = [np.c_[xxr, yyr, xxr * xxr, yyr * yyr, xxr * xxr * xxr, yyr * yyr * yyr,
-           np.power(xxr, 4), np.power(yyr, 4),
-            # np.power(xxr, 5), np.power(yyr, 5),
-           xxr * yyr,
-           xxr * xxr * yyr, xxr * yyr * yyr,
-           np.power(xxr, 3) * yyr, np.power(yyr, 3) * xxr,
-           np.power(xxr, 2) * np.power(xxr, 2)
-     ]]
+a0 = np.c_[xxr,
+          yyr,
+          np.power(xxr, 2),
+          np.power(yyr, 2),
+          np.power(xxr, 3),
+          np.power(yyr, 3),
+          np.power(xxr, 4),
+          np.power(yyr, 4),
+          xxr * yyr,
+          np.power(xxr, 2) * yyr,
+          xxr * np.power(yyr, 2),
+          np.power(xxr, 3) * yyr,
+          np.power(yyr, 3) * xxr,
+          np.power(xxr, 2) * np.power(xxr, 2)]
+
+a0 = (a0 - avgX) / maxX
+
+a = [a0]
+
 for j in range(l - 1):
     a.append(nonlin(np.dot(a[j], W[j])))
 
