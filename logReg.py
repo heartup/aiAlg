@@ -16,7 +16,7 @@ def nonlin(x, deriv=False):
 
 np.random.seed(0)
 N = 100  # number of points per class
-f = 4  # feature 数量
+f = 10  # feature 数量
 D = 2  # dimensionality
 K = 3  # number of classes
 X = np.zeros((N * K, f))
@@ -35,7 +35,13 @@ for j in range(K):
     X[ix] = np.c_[xx,
                   yy,
                   np.power(xx, 2),
-                  np.power(yy, 2)]
+                  np.power(yy, 2),
+                  np.power(xx, 3),
+                  np.power(yy, 3),
+                np.power(xx, 4),
+                np.power(yy, 4),
+                np.power(xx, 5),
+                np.power(yy, 5)]
 
     y[ix] = np.c_[j == 0, j == 1, j == 2]
 
@@ -97,7 +103,14 @@ yyr = yy.ravel()
 a0 = np.c_[xxr,
           yyr,
           np.power(xxr, 2),
-          np.power(yyr, 2)]
+          np.power(yyr, 2),
+            np.power(xxr, 3),
+          np.power(yyr, 3),
+            np.power(xxr, 4),
+          np.power(yyr, 4),
+            np.power(xxr, 5),
+          np.power(yyr, 5)]
+
 
 a0 = (a0 - avgX) / maxX
 
