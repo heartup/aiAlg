@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # def nonlin(x, deriv=False):
 #     if deriv:
 #         return 1. * (x > 0)
@@ -17,7 +16,7 @@ def nonlin(x, deriv=False):
 
 np.random.seed(0)
 N = 100  # number of points per class
-f = 14  # feature 数量
+f = 4  # feature 数量
 D = 2  # dimensionality
 K = 3  # number of classes
 X = np.zeros((N * K, f))
@@ -36,17 +35,7 @@ for j in range(K):
     X[ix] = np.c_[xx,
                   yy,
                   np.power(xx, 2),
-                  np.power(yy, 2),
-                  np.power(xx, 3),
-                  np.power(yy, 3),
-                  np.power(xx, 4),
-                  np.power(yy, 4),
-                  xx * yy,
-                  np.power(xx, 2) * yy,
-                  xx * np.power(yy, 2),
-                  np.power(xx, 3) * yy,
-                  np.power(yy, 3) * xx,
-                  np.power(xx, 2) * np.power(xx, 2)]
+                  np.power(yy, 2)]
 
     y[ix] = np.c_[j == 0, j == 1, j == 2]
 
@@ -65,11 +54,11 @@ for i in range(l - 3):
 
 W.append(2 * np.random.randn(h, 3) - 1)
 
-step_size = 0.0001
-reg_step = 0.00000001
+step_size = 0.00001
+reg_step = 0.000000001
 
 num_examples = X.shape[0]
-for i in range(10050):
+for i in range(35050):
     a = [X]
     for j in range(l - 1):
         a.append(nonlin(np.dot(a[j], W[j])))
@@ -108,17 +97,7 @@ yyr = yy.ravel()
 a0 = np.c_[xxr,
           yyr,
           np.power(xxr, 2),
-          np.power(yyr, 2),
-          np.power(xxr, 3),
-          np.power(yyr, 3),
-          np.power(xxr, 4),
-          np.power(yyr, 4),
-          xxr * yyr,
-          np.power(xxr, 2) * yyr,
-          xxr * np.power(yyr, 2),
-          np.power(xxr, 3) * yyr,
-          np.power(yyr, 3) * xxr,
-          np.power(xxr, 2) * np.power(xxr, 2)]
+          np.power(yyr, 2)]
 
 a0 = (a0 - avgX) / maxX
 
